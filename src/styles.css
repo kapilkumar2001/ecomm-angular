@@ -1,1 +1,67 @@
-/* You can add global styles to this file, and also import other style files */
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	margin-top: 65px !important;
+    margin-bottom: 80px !important;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 99%;
+	height: 60px; 
+	line-height: 30px; 
+	text-align: center;
+	background-color: #f5f5f5;
+	padding-top: 15px;
+}
+
+.required:after {
+  content:" *";
+  color: red;
+}
+
+.btn:focus, .btn.focus, button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.toggle-password {
+	right: 2rem;
+	top: 0.55rem;
+}
+
+.cart-icon {
+	position: relative;
+}
+
+.cart-icon span {
+	position: absolute;
+	top: 0px;
+	right: -6px;
+}
+
+.toast {
+	position: absolute; 
+	top: 4rem; 
+	right: 0.3rem;
+}
+
+#navbar-login-logout {
+	cursor: pointer;
+}
+
+.dropdown-item {
+	cursor: pointer;
+}
+
+.text-wrap {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1; 
+    -webkit-box-orient: vertical;
+}

@@ -1,0 +1,122 @@
+<div class="row mx-2">
+  <div class="filters-section col-12 col-md-3 col-lg-2 shadow-sm py-2 d-none d-md-block sticky-top">
+    <div id="filters-col">
+      <div class="row">
+        <h5 class="my-auto">Filters</h5>
+        <button class="close-filters-btn me-2 ms-auto my-auto btn btn-sm btn-dark py-0 d-block d-md-none">Apply & Close</button>
+        <button class="reset-btn me-2 my-auto ms-0 ms-md-auto btn btn-sm btn-outline-dark py-0 d-none">Reset</button>
+      </div>
+      <div id="filter">
+        <hr class="my-2">
+        <button class="btn bg-transparent border-0 p-0 small" type="button" data-toggle="collapse" data-target="#filter-collapse" aria-expanded="false" aria-controls="filter-collapse">
+          <i class="bi bi-caret-down-fill small"></i>
+        </button>
+        <div class="collapse pt-2 px-2">
+          <div><label class="small"><input type="checkbox" name="filtername" class="me-2"></label><br></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-9 col-lg-10 mt-2">
+    <div id="no-product" class="d-none">
+      <div class="row mt-4">
+        <i class="bi bi-search text-success fa-10x mx-auto"></i>
+      </div>
+      <h5 class="text-center mt-4">Ah! No product found for applied filters.</h5>
+      <div class="row">
+        <button class="reset-btn btn btn-sm btn-outline-success mt-3 mx-auto">Reset Filters</button>
+      </div>
+    </div>
+    <div id="products-area" class="row my-4 mx-1">
+      <div id="product-card" class="product-card p-2 col-sm-12 col-md-6 col-lg-4 col-xl-3" *ngFor="let product of productsInfo">
+        <div class="card-shadow">
+          <div class="product-images" routerLink="/product/{{product?.skuId}}">
+            <div id="carousel" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img class="product-img-1 img-fluid rounded-top border-0 mx-auto d-block" src="{{product?.images[0].src}}">
+                </div>
+                <div class="carousel-item">
+                  <img class="product-img-2 img-fluid rounded-top border-0 mx-auto d-block" src="{{product?.images[1].src}}">
+                </div>
+                <div class="carousel-item">
+                  <img class="product-img-3 img-fluid rounded-top border-0 mx-auto d-block" src="{{product?.images[2].src}}">
+                </div>
+                <div class="carousel-item">
+                  <img class="product-img-4 img-fluid rounded-top border-0 mx-auto d-block" src="{{product?.images[3].src}}">
+                </div>
+                <div class="carousel-item">
+                  <img class="product-img-5 img-fluid rounded-top border-0 mx-auto d-block" src="{{product?.images[4].src}}">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="product-details">
+            <a class="brand-name" routerLink="/product/{{product?.skuId}}">
+              <div class="ms-2 me-2 mt-2 text-muted text-wrap">{{product?.brand}}</div>
+            </a>
+            <a class="product-name" routerLink="/product/{{product?.skuId}}">
+              <div class="row mx-2 text-body text-wrap">{{product?.name}}</div>
+            </a>
+            <div class="align-items-baseline mx-2 mb-2 mt-2">
+              <span class="product-rating bg-success small rounded px-1 d-inline-block text-light">{{product?.rating | number: '1.1-1'}}
+                <i class="bi bi-star"></i></span>
+              <span class="product-reviews ms-2 text-secondary">({{product?.reviews | number: '1.0-0'}})</span>
+            </div>
+            <div class="row mt-2 py-2 align-items-center">
+              <div class="ms-4 py-1 px-0 col-auto">
+                <span class="product-price text-body fw-bold">₹{{product?.price | number: '1.0-0'}}</span>
+                <span class="product-mrp text-secondary small px-1"><s>₹{{product?.mrp | number: '1.0-0'}}</s></span>
+              </div>
+              <div *ngIf="isPresentInCart(product); then incDecQtyBlock else addToCartBlock"></div>
+              <ng-template #addToCartBlock>
+                <div class='add-to-cart-span ms-auto col-auto'>
+                  <button class='add-to-cart-btn border border-success btn btn-outline-success btn-sm mx-2 px-2 py-1 rounded' (click)="increaseQuantity(product)">Add to cart</button>
+                </div>
+              </ng-template>
+              <ng-template #incDecQtyBlock>
+                <span class='inc-dec-qty-span border border-success rounded ms-auto col-auto me-4 px-0'>
+                  <button class='dec-qty-btn btn-sm border-0 bg-transparent text-success' (click)="decreaseQuantity(product)">
+                    <i class='bi bi-dash-lg py-1 ps-1 align-middle'></i>
+                  </button> 
+                  <span class='product-qty align-middle text-success px-1'>{{userCart[product.skuId]}}</span> 
+                  <button class='inc-qty-btn btn-sm border-0 bg-transparent text-success' (click)="increaseQuantity(product)">
+                    <i class='bi bi-plus-lg py-1 pe-1 align-middle'></i>
+                  </button>
+                </span>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade confirm-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm</h5>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary btn-sm btn-no px-3">No</button>
+          <button type="button" class="btn btn-success btn-sm btn-yes px-3">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade logout-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Logout</h5>
+        </div>
+        <div class="modal-body">Are you sure, you want to logout?</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary btn-sm btn-no px-2">Cancel</button>
+          <button type="button" class="btn btn-success btn-sm btn-yes px-2">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

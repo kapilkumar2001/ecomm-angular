@@ -1,0 +1,8 @@
+.browse-box {
+    border: 0.18rem dashed rgb(119, 248, 127);
+    border-radius: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}

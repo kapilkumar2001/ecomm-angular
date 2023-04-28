@@ -1,0 +1,125 @@
+<div class="no-product-found d-none">
+  <div class="row"><i class="bi bi-search text-success fa-10x mx-auto"></i></div>
+  <h5 class="text-center my-4">Product not found!</h5>
+  <button id="go-to-home-btn" class="btn btn-sm btn-success mx-auto d-block">Go Back to Products Page</button>
+</div>
+<div class="product-details row pt-1">
+  <div class="col-sm-12 col-md-4 my-auto ps-5">
+    <div id="carouselControls" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="0" class="active" aria-current="true"></button>
+        <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="2"></button>
+        <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="3"></button>
+        <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="4"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img class="product-img-1 img-fluid rounded img-thumbnail border-0 mx-auto d-block" src="{{productDetails?.images[0].src}}">
+        </div>
+        <div class="carousel-item">
+          <img class="product-img-1 img-fluid rounded img-thumbnail border-0 mx-auto d-block" src="{{productDetails?.images[1].src}}">
+        </div>
+        <div class="carousel-item">
+          <img class="product-img-1 img-fluid rounded img-thumbnail border-0 mx-auto d-block" src="{{productDetails?.images[2].src}}">
+        </div>
+        <div class="carousel-item">
+          <img class="product-img-1 img-fluid rounded img-thumbnail border-0 mx-auto d-block" src="{{productDetails?.images[3].src}}">
+        </div>
+        <div class="carousel-item">
+          <img class="product-img-1 img-fluid rounded img-thumbnail border-0 mx-auto d-block" src="{{productDetails?.images[4].src}}">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-8 px-4 my-auto">
+    <h4 class="my-2">{{productDetails?.name}}</h4>
+    <p class="text-secondary">{{productDetails?.additionalInfo}}</p>
+    <div class="row align-items-baseline mx-1 mb-4">
+      <span class="product-rating col-auto px-0 ms-2 text-success">{{productDetails?.rating | number: '1.1-1'}} <i class="bi bi-star"></i></span>
+      <span class="col-auto px-0 ms-2 text-secondary">({{productDetails?.reviews | number: '1.0-0'}})</span>
+    </div>
+    <hr>
+    <div class="row my-2 ms-2 align-items-baseline">
+      <h4 class="col-auto px-0">₹{{productDetails?.price | number: '1.0-0'}}</h4>
+      <h6 class="col-auto px-0 text-muted ms-2"><s>₹{{productDetails?.mrp | number: '1.0-0'}}</s></h6>
+      <h6 class="col-auto px-0 text-success ms-2"><b>{{productDetails?.discountDisplayLabel}}</b></h6>
+    </div>
+    <span class="product-color my-3 ms-2">Color - {{productDetails?.color}}</span>
+    <br>
+    <span class="product-sizes my-3 ms-2">Available Sizes -
+      {{productDetails?.sizes}}</span>
+    <br>
+    <ul class="mt-3 pl-4">
+      <li>100% Original Products</li>
+      <li>Pay on delivery might be available</li>
+      <li>Easy 14 days returns and exchanges</li>
+    </ul>
+    <hr>
+    <div class="row ms-1 my-4">
+      <div *ngIf="isPresentInCart(productDetails); then incDecQtyBlock else addToCartBlock"></div>
+      <ng-template #addToCartBlock>
+        <span class="col-auto px-0">
+          <button class="add-to-cart-btn border border-success btn btn-outline-success btn-sm px-2 py-1 rounded" (click)="increaseQuantity(productDetails)">Add to cart</button>
+        </span>
+      </ng-template>
+      <ng-template #incDecQtyBlock>
+        <span class="rounded border border-success col-auto px-0">
+          <button class="dec-qty-btn btn btn-sm border-0 bg-transparent text-success" (click)="decreaseQuantity(productDetails)">
+            <i class="bi bi-dash-lg pl-1 align-middle"></i>
+          </button>
+          <span class="px-2 align-middle text-success">{{userCart[productDetails.skuId]}}</span>
+          <button class="inc-qty-btn btn btn-sm border-0 bg-transparent text-success" (click)="increaseQuantity(productDetails)">
+            <i class="bi bi-plus-lg pr-1 align-middle"></i>
+          </button>
+        </span>
+        <span class="col-auto px-0">
+          <button class="remove-from-cart-btn btn btn-sm btn-outline-danger ms-4 rounded" (click)="removeProduct(productDetails)">
+            <i class="bi bi-trash3 me-1"></i> Remove
+          </button>
+        </span>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<div class="modal fade confirm-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Remove Item</h5>
+      </div>
+      <div class="modal-body">Product will be removed from the cart. Are
+        you sure?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary btn-sm
+          btn-no px-3">No</button>
+        <button type="button" class="btn btn-success btn-sm btn-yes
+          px-3">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade logout-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Logout</h5>
+      </div>
+      <div class="modal-body">Are you sure, you want to logout?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary btn-sm
+          btn-no px-2">Cancel</button>
+        <button type="button" class="btn btn-success btn-sm btn-yes
+          px-2">Logout</button>
+      </div>
+    </div>
+  </div>
+</div>
