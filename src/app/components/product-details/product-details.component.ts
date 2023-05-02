@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IncreffService } from '../../services/increff.service';
+import productsData from '../../../assets/data/products.json'; 
 
 @Component({
     selector: 'app-product-details',
@@ -18,10 +19,8 @@ export class ProductDetailsComponent {
 
     constructor(private activateRoute: ActivatedRoute, private service: IncreffService) {
         this.skuId = this.activateRoute.snapshot.params["skuId"];
-        this.service.getProducts().subscribe((data: any) => {
-            this.productsInfo = data;
-            this.productDetails = this.productsInfo.find((c: any) => c.skuId === this.skuId);
-        });
+        this.productsInfo = productsData;
+        this.productDetails = this.productsInfo.find((c: any) => c.skuId === this.skuId);
     }
 
     ngOnInit(): void {

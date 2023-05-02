@@ -1,19 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IncreffService {
-  private userCart = new BehaviorSubject<{}>({});
+  private userCart = new BehaviorSubject<any>({});
   uCart = this.userCart.asObservable();
   
   constructor(private http: HttpClient) { }
-
-  getProducts() {
-    return this.http.get("../../assets/data/products.json");
-  }
 
   setCurrentUserIdInLocalStorage(userId: any) {
     localStorage.setItem("currentUserId", userId);
@@ -97,5 +93,9 @@ export class IncreffService {
     delete cart[userId][skuId];
     
     this.setCartInLocalStorage(cart);
+  }
+
+  clearCart() {
+    this.setCartInLocalStorage([]);
   }
 }

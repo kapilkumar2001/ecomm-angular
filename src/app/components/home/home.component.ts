@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IncreffService } from '../../services/increff.service';
 import { Router, RouterModule } from '@angular/router';
-import { RouterTestingHarness } from '@angular/router/testing';
+import productsData from '../../../assets/data/products.json'; 
 
 @Component({
     selector: 'app-home',
@@ -18,16 +18,12 @@ export class HomeComponent implements OnInit{
     constructor(private router: Router, private service: IncreffService) { }
 
     ngOnInit() {
-        this.service.getProducts().subscribe((data: any) => {
-            this.productsInfo = data;
-        });
-
+        this.productsInfo = productsData;
+        
         this.service.getUserCart();
-
         this.service.uCart.subscribe((data: any) => {
-            console.log("userCart = ");
-            console.log(data);
             this.userCart = data;
+            console.log(data);
         }); 
     }
 
