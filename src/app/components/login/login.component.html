@@ -5,25 +5,23 @@
                 <span class="font-weight-bold">Login</span>
             </div>
             <div class="card-body">
-                <form class="form" id="login-form">
+                <form class="form" #myform="ngForm" (ngSubmit)="onSubmit(myform)">
                     <div class="form-group">
                         <label for="email" class="col-sm-10 col-form-label required">Email</label>
                         <div class="col-sm-12">
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email" required>
+                            <input type="email" class="form-control" name="email" placeholder="Enter Email" ngModel>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="password-field" class="col-sm-10 col-form-label required">Password</label>
                         <div class="col-sm-12 position-relative">
-                            <input type="password" class="form-control pr-5" name="password" id="password-field" placeholder="Enter Password">
-                            <span toggle="#password-field" class="bi bi-eye-slash toggle-password position-absolute"></span>
+                            <input type="password" class="form-control pr-5" name="password" placeholder="Enter Password" ngModel>
                         </div>
                     </div>
-                    <div class="mx-auto">
-                        <button type="button" class="btn btn-success mt-3 ml-3 py-1" id="login-button">Login</button>	
-                    </div>
+                    <button type="submit" class="btn btn-success mt-4 ml-3 py-1">Login</button>	
                 </form>
             </div>
         </div>
     </div>
 </div>
+

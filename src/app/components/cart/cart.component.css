@@ -5,3 +5,7 @@ a {
 img {
     cursor: pointer;
 }
+
+.sticky-top {
+	top: 70px !important; 
+}

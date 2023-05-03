@@ -104,10 +104,49 @@ export class IncreffService {
   }
 
   clearCart() {
-    this.setCartInLocalStorage([]);
+    let cart = this.getCartFromLocalStorage();
+    let userId = this.getCurrentUserIdFromLocalStorage();
+    delete cart[userId];
+    this.setCartInLocalStorage(cart);
   }
 
   logoutUser() {
     localStorage.setItem("currentUserId", "0");
+    this.getUserCart();
+  }
+
+  mergeGuestCartToUserCart(userId: any) {
+    let cart = this.getCartFromLocalStorage();
+    let userCart = cart[userId];
+    let guestCart = cart[0];
+
+    if(guestCart && userCart) {
+      cart[userId] = this.mergeCarts(userCart, guestCart);
+    } else if(guestCart) {
+      cart[userId] = guestCart;
+    } 
+
+    delete cart[0];
+    this.setCartInLocalStorage(cart);
+  } 
+
+  mergeCarts(cart1: any, cart2: any) {
+    let newCart: any = {};
+
+    for (let i in cart1) {
+      if (cart2[i]) {
+          newCart[i] = cart1[i] + cart2[i];
+      } else {
+          newCart[i] = cart1[i];
+      }
+    }
+
+    for (let i in cart2) {
+      if (!cart1[i]) {
+          newCart[i] = cart2[i];
+      }
+    }
+    
+    return newCart;
   }
 }

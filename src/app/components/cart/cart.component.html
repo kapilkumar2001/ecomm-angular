@@ -1,4 +1,4 @@
-<div class="row p-4 d-none" id="order-placed">
+<!-- <div class="row p-4 d-none" id="order-placed">
   <div class="col-12">
     <div class="row">
       <i class="bi bi-check2-circle text-success fa-10x mx-auto"></i>
@@ -11,7 +11,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <div class="row p-4" id="cart">
   <div *ngIf="isEmptyCart(); then emptyCartBlock else cartItems"></div>
   <ng-template #emptyCartBlock>
@@ -88,7 +88,7 @@
           </div>
           <div class='row px-4 py-1'>
             <span class="col-auto">Discount</span>
-            <span class='discount ms-auto text-success col-auto'>-₹{{discount}}</span>
+            <span class='discount ms-auto text-success col-auto'>- ₹{{discount}}</span>
           </div>
           <!-- <div class='row px-4 py-1'>
             <span>Shipping Price</span>
