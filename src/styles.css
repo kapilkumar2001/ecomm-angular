@@ -29,11 +29,6 @@ body {
   box-shadow: none !important;
 }
 
-.toggle-password {
-	right: 2rem;
-	top: 0.55rem;
-}
-
 .cart-icon {
 	position: relative;
 }
@@ -41,7 +36,7 @@ body {
 .cart-icon span {
 	position: absolute;
 	top: 0px;
-	right: -6px;
+	right: -4px;
 }
 
 .toast {

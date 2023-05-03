@@ -12,11 +12,32 @@ import { IncreffService } from './services/increff.service';
 })
 export class AppComponent {
     title = 'Increff';
-    cart: any ={};
     userId: any;
+    cartItemsCount: any;
     
     constructor(private router: Router, private service: IncreffService) { }
 
-    ngOnInit() { }
+    ngOnInit() { 
+        this.service.getUserCart();
+        this.service.uCart.subscribe((data: any) => {
+            this.cartItemsCount = 0;
+            (Object.keys(data) as (keyof typeof data)[]).forEach((key) => {
+                this.cartItemsCount += data[key];
+            });
+        }); 
+    }
 
+    isUserLoggedIn() {
+        let userId = this.service.getCurrentUserIdFromLocalStorage();
+
+        if(userId && userId !== "0") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    logoutUser() {
+        this.service.logoutUser();
+    }
 }

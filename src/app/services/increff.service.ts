@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import usersData from '../../assets/data/users.json';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -22,6 +23,13 @@ export class IncreffService {
 
   checkCurrentUserId(currentUserId: any) {
     if (!currentUserId) {
+      this.setCurrentUserIdInLocalStorage("0");
+      currentUserId = 0;
+    }
+
+    let userDetails = usersData.find((c: any) => c.id === currentUserId);
+
+    if(!userDetails) {
       this.setCurrentUserIdInLocalStorage("0");
       currentUserId = 0;
     }
@@ -97,5 +105,9 @@ export class IncreffService {
 
   clearCart() {
     this.setCartInLocalStorage([]);
+  }
+
+  logoutUser() {
+    localStorage.setItem("currentUserId", "0");
   }
 }

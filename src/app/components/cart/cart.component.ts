@@ -14,6 +14,9 @@ import productsData from '../../../assets/data/products.json';
 export class CartComponent {
     productsInfo: any = [];
     userCart: any = [];
+    orderValue: any;
+    discount: any;
+    totalAmount: any;
    
     constructor(private router: Router, private service: IncreffService) { }
 
@@ -23,6 +26,17 @@ export class CartComponent {
         this.service.getUserCart();
         this.service.uCart.subscribe((data: any) => {
             this.userCart = data;
+            this.orderValue = 0;
+            this.discount = 0;
+            this.totalAmount = 0;
+
+            (Object.keys(data) as (keyof typeof data)[]).forEach((key) => {
+                let tmpProduct = this.productsInfo.find((c: any) => c.skuId === key);
+
+                this.orderValue += tmpProduct.mrp * data[key];
+                this.totalAmount += tmpProduct.price * data[key];
+                this.discount += tmpProduct.discount * data[key];
+            });
         }); 
     }
 
@@ -51,11 +65,20 @@ export class CartComponent {
     }
 
     isEmptyCart() {
-        console.log(Object.keys(this.userCart).length);
         if(Object.keys(this.userCart).length > 0) {
             return false;
         } else {
             return true;
+        }
+    }
+
+    isUserLoggedIn() {
+        let userId = this.service.getCurrentUserIdFromLocalStorage();
+
+        if(userId && userId !== "0") {
+            return true;
+        } else {
+            return false;
         }
     }
 }

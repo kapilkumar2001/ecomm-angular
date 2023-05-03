@@ -23,7 +23,6 @@ export class HomeComponent implements OnInit{
         this.service.getUserCart();
         this.service.uCart.subscribe((data: any) => {
             this.userCart = data;
-            console.log(data);
         }); 
     }
 

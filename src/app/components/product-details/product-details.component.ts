@@ -49,4 +49,12 @@ export class ProductDetailsComponent {
     removeProduct(product: any) {
         this.service.removeProductInCartFromLocalStorage(product?.skuId);
     }
+
+    productExists() {
+        if(this.productDetails) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

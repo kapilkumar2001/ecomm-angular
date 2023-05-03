@@ -12,13 +12,21 @@
             <li class="nav-item ms-2">
                 <a class="nav-link cart-icon" routerLink="cart">
                     <i class="bi bi-cart fa-lg" data-toggle="tooltip" data-placement="bottom" title="Cart" aria-hidden="true"></i>
-                    <span class="badge badge-success rounded-circle"></span>
+                    <span class="badge bg-success rounded-circle small p-1">{{cartItemsCount}}</span>
                 </a>
             </li>
             <li class="nav-item ms-2" id="navbar-login-logout">
-                <a class='nav-link' routerLink="login">
-                    <i class='bi bi-box-arrow-right fa-lg' data-toggle='tooltip' data-placement='bottom' title='Logout'></i>
-                </a>
+                <div *ngIf="isUserLoggedIn(); then logoutBlock else loginBlock"></div>
+                <ng-template #logoutBlock>
+                    <a class='nav-link' routerLink="home" (click)="logoutUser()">
+                        <i class='bi bi-box-arrow-right fa-lg' data-toggle='tooltip' data-placement='bottom' title='Logout'></i>
+                    </a>
+                </ng-template>
+                <ng-template #loginBlock>
+                    <a class='nav-link' routerLink="login">
+                        <i class='bi bi-box-arrow-in-right fa-lg' data-toggle='tooltip' data-placement='bottom' title='Login'></i>
+                    </a>
+                </ng-template>
             </li>
         </ul>
     </div>
