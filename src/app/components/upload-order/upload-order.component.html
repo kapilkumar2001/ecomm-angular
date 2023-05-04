@@ -1,124 +1,127 @@
-<!-- <div class="row p-4 d-none order-placed">
+<div id="order-placed" class="row p-4 d-none">
     <div class="col-12">
-        <div class="row"><i class="bi bi-check2-circle text-success fa-10x mx-auto"></i></div>
+        <div class="row"><i class="bi bi-check2-circle text-success fa-10x mx-auto col-auto"></i></div>
         <h5 class="text-center mb-4">Your order has been placed successfully.</h5>
         <div class="row">
-            <div class="mx-auto">
-                <button id="download-order-csv" class="btn btn-sm btn-outline-success mr-4">Download Order CSV</button>
-                <button id="start-shopping-btn" class="btn btn-sm btn-success" onclick="redirectToUploadScreen()">Upload Again</button>
+            <div class="mx-auto col-auto">
+                <button id="download-order-csv" class="btn btn-sm btn-outline-success me-4" (click)="downloadOrder()">Download Order CSV</button>
+                <button id="start-shopping-btn" class="btn btn-sm btn-success" routerLink="../home">Go to Home</button>
             </div>
         </div>
     </div>
-</div> -->
-<div *ngIf="isUserLoggedIn(); then uploadBlock else notLoggedInBlock"></div>
-<ng-template #notLoggedInBlock>
-    <div class="row">
-        <div class="col-auto mx-auto">
-            <button class="border-0 bg-transparent">
-                <i class="bi bi-box-arrow-in-right fa-10x text-success"></i>
+</div>
+<div id="upload-order">
+    <div *ngIf="isUserLoggedIn(); then uploadBlock else notLoggedInBlock"></div>
+    <ng-template #notLoggedInBlock>
+        <div class="row">
+            <div class="col-auto mx-auto">
+                <button class="border-0 bg-transparent">
+                    <i class="bi bi-box-arrow-in-right fa-10x text-success"></i>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <h5 class="col-auto mx-auto px-4"> You need to be logged in to place an order via upload. </h5>
+        </div>
+        <div class="row">
+            <div class="col-auto mx-auto mt-4">
+                <button class="btn btn-success" routerLink="../login">Login Now</button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #uploadBlock>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <h5 class="mt-4">Upload Order</h5>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <h6> Upload CSV file to place an order 
+                    <a href="../../../assets/csv/order-sample.csv" target="_blank" class="text-primary">(Sample File)</a>
+                </h6>
+            </div>
+        </div>
+        <div class="row">
+            <input type="file" name="file-input" id="file-input" accept="csv" class="custom-file-input d-none" (change)="validateFile()">
+            <button id="browse-btn" class="border-0 bg-transparent mx-auto col-12 col-lg-8" (click)="browseFileInput()">
+                <div class="browse-box">
+                    <i class="bi bi-upload text-muted mx-auto fa-4x"></i>
+                    <div class="row"><span class="mx-auto px-4">Drop the CSV File here or Click to Browse</span></div>
+                </div>
             </button>
         </div>
-    </div>
-    <div class="row">
-        <h5 class="col-auto mx-auto px-4"> You need to be logged in to place an order via upload. </h5>
-    </div>
-    <div class="row">
-        <div class="col-auto mx-auto mt-4">
-            <button class="btn btn-success" routerLink="../login">Login Now</button>
+        <div id="upload-btn-row" class="row d-none mt-2">
+            <div class="mx-auto">
+                <span id="file-name" class="px-3 border border-dark py-1 rounded me-3 align-middle"></span>
+                <button id="upload-btn" class="btn btn-sm btn-success align-middle">Upload</button>
+            </div>
         </div>
-    </div>
-</ng-template>
-<ng-template #uploadBlock>
-    <div class="row justify-content-center">
-        <div class="col-auto">
-            <h5 class="mt-4">Upload Order</h5>
+        <div id="file-error" class="d-none row mt-4">
+            <div class="mx-auto col-12 col-lg-8">
+                <h6 class="text-danger error-text"></h6>
+            </div>
         </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-auto">
-            <h6> Upload CSV file to place an order 
-                <a href="../../../assets/csv/order-sample.csv" target="_blank" class="text-primary">(Sample File)</a>
-            </h6>
-        </div>
-    </div>
-    <div class="row">
-        <input type="file" name="file-input" id="file-input" accept="csv"
-            class="custom-file-input d-none">
-        <button id="browse-btn" class="border-0 bg-transparent mx-auto col-12 col-lg-8">
-            <div class="browse-box">
-                <i class="bi bi-upload text-muted mx-auto fa-4x"></i>
-                <div class="row">
-                    <span class="mx-auto px-4">Drop the CSV File here or Click to Browse</span>
+        <div id="uploaded-items-error" class="d-none mt-4">
+            <div class="row">
+                <div class="col-12 col-lg-8 mx-auto">
+                    <h6 class="mt-4 text-danger">The attached file contains some errors.</h6>
                 </div>
             </div>
-        </button>
-    </div>
-    <div id="upload-btn-row" class="row d-none mt-2">
-        <div class="mx-auto">
-            <span id="file-name" class="px-3 border border-dark py-1 rounded mr-3 align-middle"></span>
-            <button id="upload-btn" class="btn btn-sm btn-success align-middle">Upload</button>
-        </div>
-    </div>
-    <div id="file-error" class="d-none row mt-4">
-        <div class="mx-auto col-12 col-lg-8">
-            <h6 class="text-danger error-text"></h6>
-        </div>
-    </div>
-    <div id="uploaded-items-error" class="d-none mt-4">
-        <div class="row">
-            <div class="col-12 col-lg-8 mx-auto">
-                <h6 class="mt-4 text-danger">The attached file contains some errors.</h6>
+            <div class="row">
+                <div class="col-12 col-lg-8 mx-auto">
+                    <table class="table table-striped border shadow-sm" id="errors-table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Row No</th>
+                                <th class="text-center">Barcode</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-left">Error Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of errorData">
+                                <td class="text-center">{{row.rowNumber}}</td>
+                                <td class="text-center">{{row.skuId}}</td>
+                                <td class="text-center">{{row.quantity}}</td>
+                                <td class="text-left">{{row.error}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-12 col-lg-8 mx-auto">
-                <table class="table table-striped border shadow-sm" id="errors-table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Row No</th>
-                            <th class="text-center">Barcode</th>
-                            <th class="text-center">Quantity</th>
-                            <th class="text-left">Error Description</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div id="uploaded-cart-items" class="col-12 col-lg-8 mx-auto mt-5 d-none">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <h6 class="ml-0 ml-md-4 my-auto card-title"></h6>
-                        <h6 class="my-auto ml-auto mr-3 total-amount"></h6>
-                        <button class="add-to-cart-btn btn btn-sm btn-outline-success rounded mr-2 my-auto">Add to Cart</button>
-                        <button class="place-order-btn btn btn-sm btn-success rounded mr-2 my-auto">Place Order</button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div id="uploaded-cart-item" class="row align-items-center p-2 my-4">
-                        <div class="col-sm-12 col-md-3">
-                            <img class="product-img img-fluid rounded img-thumbnail border-0 mx-auto d-block">
+            <div id="uploaded-cart-items" class="col-12 col-lg-8 mx-auto mt-5 d-none">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <h6 class="ms-0 ms-md-4 my-auto card-title col-auto">Uploaded Items(x)</h6>
+                            <h6 class="my-auto ms-auto me-3 total-amount col-auto">Rs. 12,324</h6>
+                            <!-- <button class="add-to-cart-btn btn btn-sm btn-outline-success rounded me-2 my-auto col-auto">Add to Cart</button> -->
+                            <button class="place-order-btn btn btn-sm btn-success rounded me-2 my-auto col-auto" (click)="placeOrder()">Place Order</button>
                         </div>
-                        <div class="col-sm-12 col-md-9 mt-4 mt-md-0 pl-4">
-                            <h6 class="brand-name text-muted mb-2"></h6>
-                            <a class="product-name text-body"></a>
-                            <h6 class="product-color text-body mt-2"></h6>
-                            <div class="row pl-3 mt-3">
-                                <h6 class="product-price font-weight-bold"></h6>
-                                <h6 class="product-mrp ml-2"><s></s></h6>
-                                <h6 class="product-discount text-success ml-2"></h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row align-items-center p-2 my-4" *ngFor="let product of orderData.entries()">
+                            <div class="col-sm-12 col-md-3">
+                                <img class="product-img img-fluid rounded img-thumbnail border-0 mx-auto d-block" src="{{product[1].image}}">
                             </div>
-                            <h6 class="product-qty text-body mt-2"></h6>
-                            <div class="row pl-3 mt-2">
-                                <span class="subtotal"></span>
+                            <div class="col-sm-12 col-md-9 mt-4 mt-md-0 ps-4">
+                                <h6 class="brand-name text-muted mb-2">{{product[1].brand}}</h6>
+                                <a class="product-name text-body">{{product[1].name}}</a>
+                                <h6 class="product-color text-body mt-2 small">Color - {{product[1].color}}</h6>
+                                <div class="row ps-3 mt-3">
+                                    <h6 class="product-price fw-bold px-0 col-auto">₹{{product[1].price | number: '1.0-0'}}</h6>
+                                    <h6 class="product-mrp px-0 ms-2 col-auto"><s>₹{{product[1].mrp | number: '1.0-0'}}</s></h6>
+                                    <h6 class="product-discount text-success px-0 ms-2 col-auto">{{product[1].discount}}</h6>
+                                </div>
+                                <h6 class="product-qty text-body mt-2">Quantity - {{product[1].quantity}}</h6>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</ng-template>
+    </ng-template>
+</div>

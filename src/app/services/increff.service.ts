@@ -161,4 +161,17 @@ export class IncreffService {
     tempLink.click();
     tempLink.remove();
   }
+
+  readFileData(file: any, callback: (results: any) => void): void {
+    let config: any = {
+      header: true,
+      delimiter: ",",
+      skipEmptyLines: "greedy",
+      complete: (results: any) => {
+        callback(results);
+      }
+    };
+    Papa.parse(file, config);
+  }
 }
+
