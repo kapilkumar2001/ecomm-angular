@@ -1,160 +1,164 @@
-<!-- <div class="row p-4 d-none" id="order-placed">
-  <div class="col-12">
-    <div class="row">
-      <i class="bi bi-check2-circle text-success fa-10x mx-auto"></i>
-    </div>
-    <h5 class="text-center mb-4">Your order has been placed successfully.</h5>
-    <div class="row">
-      <div class="mx-auto">
-        <button id="download-order-csv" class="btn btn-sm btn-outline-success me-4">Download Order CSV</button>
-        <button id="start-shopping-btn" class="btn btn-sm btn-success" routerLink="../home">Shop Again</button>
-      </div>
-    </div>
-  </div>
-</div> -->
-<div class="row p-4" id="cart">
-  <div *ngIf="isEmptyCart(); then emptyCartBlock else cartItems"></div>
-  <ng-template #emptyCartBlock>
+<div class="row p-4 d-none" id="order-placed">
     <div class="col-12">
-      <div class="row">
-        <div class="col-auto mx-auto">
-          <i class="bi bi-cart-x text-success fa-10x"></i>
+        <div class="row">
+            <i class="bi bi-check2-circle text-success fa-10x col-auto mx-auto"></i>
         </div>
-      </div>
-      <h5 class="text-center mb-4">Your cart is empty.</h5>
-      <button class="btn btn-success mx-auto d-block" routerLink="../home">Start Shopping</button>
-    </div>
-  </ng-template>
-  <ng-template #cartItems>
-    <div class="col-sm-12 col-md-7 col-lg-8">
-      <div class="card">
-        <div class="card-header">
-          <div class="row">
-            <h5 class="ms-4 my-auto col-auto">Your Cart</h5>
-            <button id="clear-cart-btn" class="btn btn-sm btn-outline-danger ms-auto rounded me-2 my-auto col-auto" (click)="clearCart()">
-              <i class="bi bi-trash3 me-1"></i> Clear Cart
-            </button>
-          </div>
-        </div>
-        <div class="card-body">
-          <div *ngFor="let item of productsInfo">
-            <div *ngIf="isPresentInCart(item)" id="cart-item" class="px-2 py-4 py-lg-2">
-              <div class="row align-items-center">
-                <div class="col-sm-12 col-md-3" routerLink="/product/{{item?.skuId}}">
-                  <img class="product-img img-fluid rounded img-thumbnail border-0 mx-auto d-block" src="{{item?.searchImage}}">
-                </div>
-                <div class="col-sm-12 col-md-9 mt-2 mt-md-0 ps-4">
-                  <h6 class="brand-name text-muted mb-2">{{item?.brand}}</h6>
-                  <a class="product-name text-body text-wrap" routerLink="/product/{{item?.skuId}}">{{item?.name}}</a>
-                  <div class="product-color text-body mt-2 small">Color - {{item?.color}}</div>
-                  <div class="product-size text-body small">Size - {{item?.sizes}}</div>
-                  <div class="row ps-1 mt-3">
-                    <div class="col-auto">
-                      <span class="product-price text-body fw-bold pe-0">₹{{item?.price | number: '1.0-0'}}</span>
-                      <span class="product-mrp text-secondary px-1 small"><s>₹{{item?.mrp | number: '1.0-0'}}</s></span>
-                      <span class="product-discount text-success fw-bold px-0">{{item?.discountDisplayLabel}}</span>
-                    </div>
-                  </div>
-                  <div class="row ps-2 mt-3">
-                    <span class="inc-dec-qty-span border rounded border-success align-self-end col-auto px-0">
-                      <button class="dec-qty-btn border-0 bg-transparent text-success" (click)="decreaseQuantity(item)">
-                        <i class="bi bi-dash-lg ps-1 align-middle"></i>
-                      </button>
-                      <span class="product-qty px-1 align-middle text-success">{{userCart[item?.skuId]}}</span>
-                      <button class="inc-qty-btn border-0 bg-transparent text-success" (click)="increaseQuantity(item)">
-                        <i class="bi bi-plus-lg pe-1 align-middle"></i>
-                      </button>
-                    </span>
-                    <button class="remove-item-btn btn btn-sm btn-outline-danger rounded px-2 py-0 ms-4 col-auto" (click)="removeProduct(item)">
-                      <i class="bi bi-trash3 me-1"></i> Remove
-                    </button>
-                  </div>
-                </div>
-              </div>
+        <h5 class="text-center mb-4">Your order has been placed successfully.</h5>
+        <div class="row">
+            <div class="mx-auto col-auto">
+                <button class="btn btn-sm btn-outline-success me-4" (click)="downloadOrder()">Download Order CSV</button>
+                <button class="btn btn-sm btn-success" routerLink="../home">Shop Again</button>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-    <div id='order-summary' class='col-sm-12 col-md-5 col-lg-4 mt-4 mt-md-0'>
-      <div class="card sticky-top">
-        <div class="card-header">
-          <h5 class="p-1 my-auto">Order Summary</h5>
-        </div>                                                                                                                                                                                                                                                                                        
-        <div class="card-body">
-          <div class='row px-4 pt-4 pb-1'>
-            <span class="col-auto">Order Value</span>
-            <span class='order-value ms-auto col-auto'>₹{{orderValue}}</span>
-          </div>
-          <div class='row px-4 py-1'>
-            <span class="col-auto">Discount</span>
-            <span class='discount ms-auto text-success col-auto'>- ₹{{discount}}</span>
-          </div>
-          <!-- <div class='row px-4 py-1'>
-            <span>Shipping Price</span>
-            <span class='shipping-price ms-auto'></span>
-          </div>
-          <div class='row px-4 py-1'>
-            <span class="free-delivery text-success">Add items worth {{5000 - totalAmount}} more to get free delivery on this order.</span>
-          </div> -->
-          <hr>
-          <div class='row px-4 py-2'>
-            <span class="font-weight-bold col-auto">Total Amount</span>
-            <span class='total-amount font-weight-bold ms-auto col-auto'>₹{{totalAmount}}</span>
-          </div>
-          <div class="row px-3">
-            <div *ngIf="isUserLoggedIn(); then placeOrderBlock else loginToPlaceOrderBlock"></div>
-            <ng-template #placeOrderBlock>
-              <button class="place-order-btn btn btn-sm btn-block btn-success border mx-2 mt-4 px-4 py-2 rounded ms-auto">Place Order</button>
-            </ng-template>
-            <ng-template #loginToPlaceOrderBlock>
-              <button class="place-order-btn btn btn-sm btn-block btn-success border mx-2 mt-4 px-4 py-2 rounded ms-auto" routerLink="login">Login to Place Order</button>
-            </ng-template>
-          </div>
+</div>
+<div class="row p-4" id="cart">
+    <div *ngIf="isEmptyCart(); then emptyCartBlock else cartItems"></div>
+    <ng-template #emptyCartBlock>
+        <div class="col-12">
+            <div class="row">
+                <div class="col-auto mx-auto">
+                    <i class="bi bi-cart-x text-success fa-10x"></i>
+                </div>
+            </div>
+            <h5 class="text-center mb-4">Your cart is empty.</h5>
+            <button class="btn btn-success mx-auto d-block" routerLink="../home">Start Shopping</button>
         </div>
-      </div>
+    </ng-template>
+    <ng-template #cartItems>
+        <div class="col-sm-12 col-md-7 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <h5 class="ms-4 my-auto col-auto">Your Cart</h5>
+                        <button id="clear-cart-btn" class="btn btn-sm btn-outline-danger ms-auto rounded me-2 my-auto col-auto" (click)="clearCart()">
+                            <i class="bi bi-trash3 me-1"></i> Clear Cart
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div *ngFor="let item of productsInfo">
+                        <div *ngIf="isPresentInCart(item)" id="cart-item" class="px-2 py-4 py-lg-2">
+                            <div class="row align-items-center">
+                                <div class="col-sm-12 col-md-3" routerLink="/product/{{item?.skuId}}">
+                                    <img class="product-img img-fluid rounded img-thumbnail border-0 mx-auto d-block" src="{{item?.searchImage}}">
+                                </div>
+                                <div class="col-sm-12 col-md-9 mt-2 mt-md-0 ps-4">
+                                    <h6 class="brand-name text-muted mb-2">{{item?.brand}}</h6>
+                                    <a class="product-name text-body text-wrap" routerLink="/product/{{item?.skuId}}">{{item?.name}}</a>
+                                    <div class="product-color text-body mt-2 small">Color - {{item?.color}}</div>
+                                    <div class="product-size text-body small">Size - {{item?.sizes}}</div>
+                                    <div class="row ps-1 mt-3">
+                                        <div class="col-auto">
+                                            <span class="product-price text-body fw-bold pe-0">₹{{item?.price | number: '1.0-0'}}</span>
+                                            <span class="product-mrp text-secondary px-1 small"><s>₹{{item?.mrp | number: '1.0-0'}}</s></span>
+                                            <span class="product-discount text-success fw-bold px-0">{{item?.discountDisplayLabel}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="row ps-2 mt-3">
+                                        <span class="inc-dec-qty-span border rounded border-success align-self-end col-auto px-0">
+                                            <button class="dec-qty-btn border-0 bg-transparent text-success" (click)="decreaseQuantity(item)">
+                                                <i class="bi bi-dash-lg ps-1 align-middle"></i>
+                                            </button>
+                                            <span class="product-qty px-1 align-middle text-success">{{userCart[item?.skuId]}}</span>
+                                            <button class="inc-qty-btn border-0 bg-transparent text-success" (click)="increaseQuantity(item)">
+                                                <i class="bi bi-plus-lg pe-1 align-middle"></i>
+                                            </button>
+                                        </span>
+                                        <button class="remove-item-btn btn btn-sm btn-outline-danger rounded px-2 py-0 ms-4 col-auto" (click)="removeProduct(item)">
+                                            <i class="bi bi-trash3 me-1"></i> Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='order-summary' class='col-sm-12 col-md-5 col-lg-4 mt-4 mt-md-0'>
+            <div class="card sticky-top">
+                <div class="card-header">
+                    <h5 class="p-1 my-auto">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class='row px-4 pt-4 pb-1'>
+                        <span class="col-auto">Order Value</span>
+                        <span class='order-value ms-auto col-auto'>₹{{orderValue}}</span>
+                    </div>
+                    <div class='row px-4 py-1'>
+                        <span class="col-auto">Discount</span>
+                        <span class='discount ms-auto text-success col-auto'>- ₹{{discount}}</span>
+                    </div>
+                    <!-- <div class='row px-4 py-1'>
+                        <span>Shipping Price</span>
+                        <span class='shipping-price ms-auto'></span>
+                    </div>
+                    <div class='row px-4 py-1'>
+                        <span class="free-delivery text-success">Add items worth {{5000 - totalAmount}} more to get free delivery on this order.</span>
+                    </div> -->
+                    <hr>
+                    <div class='row px-4 py-2'>
+                        <span class="font-weight-bold col-auto">Total Amount</span>
+                        <span class='total-amount font-weight-bold ms-auto col-auto'>₹{{totalAmount}}</span>
+                    </div>
+                    <div class="row px-3">
+                        <div *ngIf="isUserLoggedIn(); then placeOrderBlock else loginToPlaceOrderBlock"></div>
+                        <ng-template #placeOrderBlock>
+                            <button class="place-order-btn btn btn-sm btn-block btn-success border mx-2 mt-4 px-4 py-2 rounded ms-auto" (click)="placeOrder()">Place Order</button>
+                        </ng-template>
+                        <ng-template #loginToPlaceOrderBlock>
+                            <button class="place-order-btn btn btn-sm btn-block btn-success border mx-2 mt-4 px-4 py-2 rounded ms-auto" routerLink="../login">Login to Place Order</button>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <div class="modal fade confirm-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm</h5>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-sm btn-no px-3">No</button>
+                    <button type="button" class="btn btn-success btn-sm btn-yes px-3">Yes</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </ng-template>
-  <div class="modal fade confirm-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Confirm</h5>
+    <div class="modal fade logout-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Logout</h5>
+                </div>
+                <div class="modal-body">Are you sure, you want to logout?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary
+                        btn-sm btn-no px-2">Cancel</button>
+                    <button type="button" class="btn btn-success btn-sm btn-yes
+                        px-2">Logout</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body"></div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary btn-sm btn-no px-3">No</button>
-          <button type="button" class="btn btn-success btn-sm btn-yes px-3">Yes</button>
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="modal fade logout-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Confirm Logout</h5>
+    <div class="modal fade place-order-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Order</h5>
+                </div>
+                <div class="modal-body">You are about to place your order.</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary
+                        btn-sm btn-no px-2">Cancel</button>
+                    <button type="button" class="btn btn-success btn-sm btn-yes
+                        px-2">Place Order</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">Are you sure, you want to logout?</div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary btn-sm btn-no px-2">Cancel</button>
-          <button type="button" class="btn btn-success btn-sm btn-yes px-2">Logout</button>
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="modal fade place-order-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Confirm Order</h5>
-        </div>
-        <div class="modal-body">You are about to place your order.</div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary btn-sm btn-no px-2">Cancel</button>
-          <button type="button" class="btn btn-success btn-sm btn-yes px-2">Place Order</button>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>

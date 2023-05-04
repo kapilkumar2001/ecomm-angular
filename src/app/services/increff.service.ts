@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import usersData from '../../assets/data/users.json';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import * as Papa from 'papaparse';
 
 @Injectable({
   providedIn: 'root'
@@ -142,11 +143,22 @@ export class IncreffService {
     }
 
     for (let i in cart2) {
-      if (!cart1[i]) {
-          newCart[i] = cart2[i];
-      }
+      if (!cart1[i]) newCart[i] = cart2[i];
     }
     
     return newCart;
+  }
+
+  writeFileData(data: any) {
+    let csvString = Papa.unparse(data);
+    
+    let blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    let tempLink = document.createElement("a");
+    tempLink.setAttribute("href", url);
+    tempLink.setAttribute("download", "order");
+    tempLink.click();
+    tempLink.remove();
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { IncreffService } from 'src/app/services/increff.service';
@@ -17,8 +17,9 @@ export class CartComponent {
     orderValue: any;
     discount: any;
     totalAmount: any;
+    orderData: any  =[];
    
-    constructor(private router: Router, private service: IncreffService) { }
+    constructor(private router: Router, private service: IncreffService, private renderer: Renderer2, private elementRef: ElementRef) { }
 
     ngOnInit() {
         this.productsInfo = productsData;
@@ -80,5 +81,35 @@ export class CartComponent {
         } else {
             return false;
         }
+    }
+
+    placeOrder() {
+        this.productsInfo = productsData;
+        this.orderData = [];
+
+        for(let i in this.productsInfo) {
+            if(this.isPresentInCart(this.productsInfo[i])) {
+                let row = {
+                    SkuID: this.productsInfo[i]["skuId"],
+                    Name: this.productsInfo[i]["name"],
+                    Quantity: this.userCart[this.productsInfo[i]["skuId"]],
+                    Mrp: this.productsInfo[i]["mrp"],
+                    SellingPrice: this.productsInfo[i]["price"],
+                    Amount: (this.userCart[this.productsInfo[i]["skuId"]]) * (this.productsInfo[i]["price"])
+                };
+                this.orderData.push(row);
+            }
+        }
+
+        this.service.writeFileData(this.orderData);
+        this.clearCart();
+        let cartElement = this.elementRef.nativeElement.querySelector('#cart');
+        let orderPlacedElement = this.elementRef.nativeElement.querySelector('#order-placed');
+        this.renderer.addClass(cartElement, 'd-none');
+        this.renderer.removeClass(orderPlacedElement, 'd-none');
+    }
+
+    downloadOrder() {
+        this.service.writeFileData(this.orderData);
     }
 }
