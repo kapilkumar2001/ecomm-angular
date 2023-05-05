@@ -5,7 +5,7 @@
         <div class="row">
             <div class="mx-auto col-auto">
                 <button id="download-order-csv" class="btn btn-sm btn-outline-success me-4" (click)="downloadOrder()">Download Order CSV</button>
-                <button id="start-shopping-btn" class="btn btn-sm btn-success" routerLink="../home">Go to Home</button>
+                <button id="start-shopping-btn" class="btn btn-sm btn-success" (click)="uploadAgainClick()">Upload Again</button>
             </div>
         </div>
     </div>
@@ -96,8 +96,8 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <h6 class="ms-0 ms-md-4 my-auto card-title col-auto">Uploaded Items(x)</h6>
-                            <h6 class="my-auto ms-auto me-3 total-amount col-auto">Rs. 12,324</h6>
+                            <h6 class="ms-0 ms-md-4 my-auto card-title col-auto">Uploaded Items ({{orderItems}})</h6>
+                            <h6 class="my-auto ms-auto me-2 total-amount col-auto">Total Amount: ₹{{totalAmount | number: '1.0-0'}}</h6>
                             <!-- <button class="add-to-cart-btn btn btn-sm btn-outline-success rounded me-2 my-auto col-auto">Add to Cart</button> -->
                             <button class="place-order-btn btn btn-sm btn-success rounded me-2 my-auto col-auto" (click)="placeOrder()">Place Order</button>
                         </div>
@@ -111,12 +111,26 @@
                                 <h6 class="brand-name text-muted mb-2">{{product[1].brand}}</h6>
                                 <a class="product-name text-body">{{product[1].name}}</a>
                                 <h6 class="product-color text-body mt-2 small">Color - {{product[1].color}}</h6>
-                                <div class="row ps-3 mt-3">
+                                <div class="row ps-3 mt-3 align-items-center">
                                     <h6 class="product-price fw-bold px-0 col-auto">₹{{product[1].price | number: '1.0-0'}}</h6>
-                                    <h6 class="product-mrp px-0 ms-2 col-auto"><s>₹{{product[1].mrp | number: '1.0-0'}}</s></h6>
+                                    <h6 class="product-mrp px-0 ms-2 col-auto small"><s>₹{{product[1].mrp | number: '1.0-0'}}</s></h6>
                                     <h6 class="product-discount text-success px-0 ms-2 col-auto">{{product[1].discount}}</h6>
                                 </div>
-                                <h6 class="product-qty text-body mt-2">Quantity - {{product[1].quantity}}</h6>
+                                <!-- <h6 class="product-qty text-body mt-2">Quantity - {{product[1].quantity}}</h6> -->
+                                <div class="row ps-2 mt-3">
+                                    <span class="inc-dec-qty-span border rounded border-success align-self-end col-auto px-0">
+                                        <button class="dec-qty-btn border-0 bg-transparent text-success" (click)="decreaseQuantity(product[0])">
+                                            <i class="bi bi-dash-lg ps-1 align-middle"></i>
+                                        </button>
+                                        <span class="product-qty px-1 align-middle text-success">{{product[1].quantity}}</span>
+                                        <button class="inc-qty-btn border-0 bg-transparent text-success" (click)="increaseQuantity(product[0])">
+                                            <i class="bi bi-plus-lg pe-1 align-middle"></i>
+                                        </button>
+                                    </span>
+                                    <button class="remove-item-btn btn btn-sm btn-outline-danger rounded px-2 py-0 ms-4 col-auto" (click)="removeProduct(product[0])">
+                                        <i class="bi bi-trash3 me-1"></i> Remove
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

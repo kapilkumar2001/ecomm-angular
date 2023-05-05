@@ -17,6 +17,7 @@ export class CartComponent {
     orderValue: any;
     discount: any;
     totalAmount: any;
+    orderItems: any;
     orderData: any  =[];
    
     constructor(private router: Router, private service: IncreffService, private renderer: Renderer2, private elementRef: ElementRef) { }
@@ -30,6 +31,7 @@ export class CartComponent {
             this.orderValue = 0;
             this.discount = 0;
             this.totalAmount = 0;
+            this.orderItems = 0;
 
             (Object.keys(data) as (keyof typeof data)[]).forEach((key) => {
                 let tmpProduct = this.productsInfo.find((c: any) => c.skuId === key);
@@ -37,6 +39,7 @@ export class CartComponent {
                 this.orderValue += tmpProduct.mrp * data[key];
                 this.totalAmount += tmpProduct.price * data[key];
                 this.discount += tmpProduct.discount * data[key];
+                this.orderItems += data[key];
             });
         }); 
     }

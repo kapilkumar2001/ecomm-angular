@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Renderer2 } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterLinkWithHref, RouterModule } from '@angular/router';
 import { IncreffService } from 'src/app/services/increff.service';
 import productsData from '../../../assets/data/products.json';
 
@@ -17,11 +17,17 @@ export class UploadOrderComponent {
   fileData: any;
   errorData: any;
   productsInfo: any;
+  orderItems: any;
+  totalAmount: any;
 
   constructor(private router: Router, private service: IncreffService, private renderer: Renderer2, private elementRef: ElementRef) { }
 
   ngOnInit() {
     this.productsInfo = productsData;
+    this.orderData = new Map();
+
+    this.orderItems = 0;
+    this.totalAmount = 0;
   }
 
   isUserLoggedIn() {
@@ -39,6 +45,7 @@ export class UploadOrderComponent {
     let uploadedErrorsElement = this.elementRef.nativeElement.querySelector('#uploaded-items-error');
     let fileInputElement = this.elementRef.nativeElement.querySelector('#file-input');
 
+    this.renderer.selectRootElement(fileInputElement).value = "";
     this.renderer.selectRootElement(fileInputElement).click();
     this.renderer.addClass(uploadedItemsElement, 'd-none');
     this.renderer.addClass(uploadedErrorsElement, 'd-none');
@@ -144,11 +151,14 @@ export class UploadOrderComponent {
         row.quantity = parseInt(row.quantity);
 
         if (!this.orderData[row.skuId]) {
-          this.orderData.set([row.skuId], row);
+          this.orderData.set(row.skuId, row);
         } else {
           row.quantity = row.quantity + this.orderData[row.skuId]["quantity"];
-          this.orderData.set([row.skuId], row);
+          this.orderData.set(row.skuId, row);
         }
+
+        this.orderItems += parseInt(row.quantity);
+        this.totalAmount += (parseInt(row.quantity) * parseInt(row.price));
       }
     }
 
@@ -160,16 +170,8 @@ export class UploadOrderComponent {
   }
 
   showOrder() {
-    for(let product of this.orderData) {
-      console.log("in orderData");
-      console.log(product);
-      console.log(product[0]);
-    }
-
     let uploadedItemsElement = this.elementRef.nativeElement.querySelector('#uploaded-cart-items');
     this.renderer.removeClass(uploadedItemsElement, 'd-none');
-
-    console.log(this.orderData);
   }
 
   showError() {
@@ -190,5 +192,46 @@ export class UploadOrderComponent {
   downloadOrder() {
     let orderDataArray = Array.from(this.orderData.values());
     this.service.writeFileData(orderDataArray);
+  }
+
+  uploadAgainClick() {
+    window.location.reload();
+  }
+
+  increaseQuantity(skuId: any) {
+    let row = this.orderData.get(skuId);
+    console.log(row);
+    row.quantity = row.quantity + 1;
+
+    this.orderData.set(skuId, row);
+    this.orderItems += 1;
+    this.totalAmount += parseInt(row.price);
+  }
+
+  decreaseQuantity(skuId: any) {
+    let row = this.orderData.get(skuId);
+   
+    if(row.quantity > 1) {
+      row.quantity = row.quantity - 1;
+      this.orderData.set(skuId, row);
+
+      this.orderItems -= 1;
+      this.totalAmount -= parseInt(row.price);
+    } else {
+      this.removeProduct(skuId);
+    }
+  }
+
+  removeProduct(skuId: any) {
+    let row = this.orderData.get(skuId);
+
+    this.orderData.delete(skuId);
+    this.orderItems -= parseInt(row.quantity);
+    this.totalAmount -= (parseInt(row.price) * parseInt(row.quantity));
+
+    if(this.orderItems === 0) {
+      let uploadedItemsElement = this.elementRef.nativeElement.querySelector('#uploaded-cart-items');
+      this.renderer.addClass(uploadedItemsElement, 'd-none');
+    }
   }
 }
